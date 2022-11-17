@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">JustDeliveroo</string>
+    <string name="food_image">Foto</string>
+    <string name="euro">€</string>
+    <string name="db_URL">https://prueba1-eed85-default-rtdb.europe-west1.firebasedatabase.app/</string>
+    <string name="db_name">JustDeliverooDB</string>
+    <string name="_0">0</string>
+    <string name="updating_menu">Actualizando el menú</string>
+    <string name="carga">Cargando...</string>
+    <string name="view_cart">Ver Carrito</string>
+    <string name="sort_food">Ordenar</string>
+    <string name="sort_price">Precio (Menor a mayor)</string>
+    <string name="sort_rating">Ordenar por valoración</string>
+    <string name="delivery_charges">Gastos de envío</string>
+    <string name="discount">Descuento</string>
+    <string name="cart_total">Precio Productos</string>
+    <string name="bill_details">Pedido</string>
+    <string name="coupon">Escribe tú cupón (Opcional)</string>
+    <string name="your_cart">Carrito</string>
+    <string name="no_internet_connection">No estás conectado a internet</string>
+    <string name="invalid_mail">Por favor, escribe un email válido</string>
+    <string name="invalid_password">Por favor, escribe una constraseña con más de 6 digitos</string>
+</resources>
