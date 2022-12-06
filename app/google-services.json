@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "977951727807",
-    "project_id": "appdelivery-60c9e",
-    "storage_bucket": "appdelivery-60c9e.appspot.com"
+    "project_number": "800986885060",
+    "firebase_url": "https://justdeliveroo-9692f-default-rtdb.firebaseio.com",
+    "project_id": "justdeliveroo-9692f",
+    "storage_bucket": "justdeliveroo-9692f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:977951727807:android:0fcb8d04486afb7034660a",
+        "mobilesdk_app_id": "1:800986885060:android:dec14086c72bf51eec1291",
         "android_client_info": {
-          "package_name": "com.mycompany.android"
+          "package_name": "com.alvaro.justdeliveroo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "977951727807-32c33h61r0qhh3br2qqimvu4bqqbh4qb.apps.googleusercontent.com",
+          "client_id": "800986885060-7oio269oppcb7aslvduruuanmi3jt64v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAm9DAdDxRuyDfJoFC9YXV71BlzzA9Uzq0"
+          "current_key": "AIzaSyABnBFWRBoDiFSGVbnOlAIYi3fyypRqWC0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "977951727807-32c33h61r0qhh3br2qqimvu4bqqbh4qb.apps.googleusercontent.com",
+              "client_id": "800986885060-7oio269oppcb7aslvduruuanmi3jt64v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

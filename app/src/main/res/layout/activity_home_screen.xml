@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.javier.justdeliveroo.ui.HomeScreenActivity"
+    tools:context="com.alvaro.justdeliveroo.ui.HomeScreenActivity"
     android:background="@color/grey">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -103,7 +103,7 @@
                 android:layout_toEndOf="@+id/i_cart"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
-                android:text="0"
+                android:text="@string/_0"
                 android:textColor="@color/white" />
 
             <View

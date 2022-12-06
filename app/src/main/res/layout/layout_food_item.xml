@@ -41,7 +41,7 @@
                 android:layout_below="@+id/i_food_image"
                 android:layout_alignParentStart="true" />
 
-            <com.javier.justdeliveroo.ui.RatingTextView
+            <com.alvaro.justdeliveroo.ui.RatingTextView
                 android:id="@+id/t_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

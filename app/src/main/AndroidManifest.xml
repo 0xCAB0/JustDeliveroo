@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.javier.justdeliveroo">
+    package="com.alvaro.justdeliveroo">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.LoginActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:exported="true">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -21,22 +22,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.javier.justdeliveroo.ui.HomeScreenActivity"
-            android:theme="@style/AppTheme.Launcher">
+        <activity android:name="com.alvaro.justdeliveroo.ui.HomeScreenActivity"
+            android:theme="@style/AppTheme.Launcher"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="http"
-                    android:host="javier.justdeliveroo.com" />
+                    android:host="alvaro.justdeliveroo.com" />
             </intent-filter>
         </activity>
-        <activity android:name="com.javier.justdeliveroo.ui.ProductoActivity"
+        <activity android:name="com.alvaro.justdeliveroo.ui.ProductoActivity"
             android:theme="@style/AppTheme"
-            android:parentActivityName="com.javier.justdeliveroo.ui.ProductoActivity"/>
-        <activity android:name="com.javier.justdeliveroo.ui.CartActivity"
-            android:parentActivityName="com.javier.justdeliveroo.ui.CartActivity"/>
+            android:exported="true"
+            android:parentActivityName="com.alvaro.justdeliveroo.ui.ProductoActivity"/>
+        <activity android:name="com.alvaro.justdeliveroo.ui.CartActivity"
+            android:exported="true"
+            android:parentActivityName="com.alvaro.justdeliveroo.ui.CartActivity"/>
         <activity android:name=".ui.RegistrarActivity"
-            android:parentActivityName="com.javier.justdeliveroo.ui.LoginActivity"/>
+            android:exported="true"
+            android:parentActivityName="com.alvaro.justdeliveroo.ui.LoginActivity"/>
     </application>
 </manifest>
