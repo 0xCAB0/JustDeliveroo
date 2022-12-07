@@ -12,18 +12,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alvaro.justdeliveroo.R;
+import com.alvaro.justdeliveroo.conexion.checkConexion;
+import com.alvaro.justdeliveroo.viewmodel.LoginViewModel;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.alvaro.justdeliveroo.R;
-import com.alvaro.justdeliveroo.conexion.checkConexion;
-import com.alvaro.justdeliveroo.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -37,6 +36,7 @@ public class LoginActivity extends AppCompatActivity{
     //Utilizamos la librería awesomeValidation para validar los campos del formulario
     AwesomeValidation awesomeValidation;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_Base);
         super.onCreate(savedInstanceState);
@@ -53,10 +53,6 @@ public class LoginActivity extends AppCompatActivity{
         login= findViewById(R.id.login_btn);
         reg= findViewById(R.id.passw_btn);
 
-
-        //COMENTAR ANTES DE ENTREGAR (SOLO PRUEBAS)
-        //rellena(usr, passw);
-
         //Iniciamos los procesos
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -71,7 +67,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(awesomeValidation.validate()) {
-                    //Recogemos su imput
+                    //Recogemos user inpuit
                     String usrname = usr.getText().toString();
                     String pass = passw.getText().toString();
 
@@ -79,28 +75,25 @@ public class LoginActivity extends AppCompatActivity{
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            //Control de errores
-                            if(!(task.isSuccessful())){
-                                String errorCode;
-                                boolean networkAvailable = checkConexion.isConnected(LoginActivity.this);
-
-                                if (!networkAvailable) {
-                                  //  Toast.makeText(LoginActivity.this, "No estás conectado a Internet", Toast.LENGTH_SHORT).show();
-                                    errorCode= ((FirebaseNetworkException) task.getException()).getMessage();
-                                }
-                                else {
-                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                    //Función auxiliar que devuelve un texto en función del código del error
-                                }
-                                    lvm.getError(errorCode, LoginActivity.this, usr, passw);
-
-                            }
-                            else{
+                            if(task.isSuccessful()){
                                 //Vamos a home y pasamos las credenciales por intent
                                 Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
                                 //intent.putExtra("user", usrname);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                //Control de errores
+                                String errorCode;
+                                boolean networkAvailable = checkConexion.isConnected(LoginActivity.this);
+                                if (!networkAvailable) {
+                                    errorCode= ((FirebaseNetworkException) task.getException()).getMessage();
+                                }
+                                else {
+                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                }
+                                lvm.getError(errorCode, LoginActivity.this, usr, passw);
                             }
                         }
                     });
@@ -122,9 +115,4 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    //Función que rellena los campos para hacer pruebas más rápido
-    private void rellena(EditText e1, EditText e2){
-        e1.setText("j@m.com");
-        e2.setText("123456");
-    }
 }

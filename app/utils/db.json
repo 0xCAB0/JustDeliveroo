@@ -1,0 +1,35 @@
+{
+  "Comida": [
+    {
+      "name": "Hamburguesa Enorme",
+      "price": 12.5,
+      "rating": 10,
+      "url": "https://hips.hearstapps.com/hmg-prod/images/hamburguesa-elle-1644938053.jpg",
+      "description": "Hamburguesa gigante"
+    },
+    {
+      "name": "Pizza Carbonara",
+      "price": 11,
+      "rating": 8.5,
+      "url": "https://tupizzaiolo.com/wp-content/uploads/2021/12/receta-pizza-carbonara-min.jpg"
+    },
+    {
+      "name": "Macarrones al Pesto",
+      "price": 9.5,
+      "rating": 6.5,
+      "url": "https://t1.rg.ltmcdn.com/es/posts/4/3/3/pasta_al_pesto_genovese_73334_paso_3_600.jpg"
+    },
+    {
+      "name": "Yatecomo",
+      "price": 5.5,
+      "rating": 3,
+      "url": "https://www.clinicasubiza.com/Portals/0/YATEKOMO.jpg"
+    },
+    {
+      "name": "Croquetas",
+      "price": 7,
+      "rating": 5,
+      "url": "https://cdn1.cocina-familiar.com/recetas/nuggets-de-pollo-caseros.jpg"
+    }
+  ]
+}
