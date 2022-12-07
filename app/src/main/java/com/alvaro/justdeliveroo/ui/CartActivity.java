@@ -39,6 +39,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     Observer<Double> costObserver;
     Observer<String> errorObserver;
     CartListAdapter cartListAdapter;
+    NotificationHandler handler;
+    String titleString = "Cupón Promocional";
+    String msgString = "Gracias por usar el código promocional";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,6 +173,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 eCoupon.setLongClickable(false);
                 iRemoveCoupon.setVisibility(View.VISIBLE);
                 bApply.setVisibility(View.INVISIBLE);
+                Notification.Builder nBuilder = handler.createNotification(titleString, msgString, true);
+                handler.getManager().notify(1,nBuilder.build());
             } else {
                 eCouponLayout.setErrorEnabled(true);
                 eCouponLayout.setError("Cupón inválido/Caducado");
