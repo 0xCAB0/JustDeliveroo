@@ -2,9 +2,12 @@ package com.alvaro.justdeliveroo.utility;
 
 import java.util.Observable;
 
+/**
+ * Clase que permite operar con las instancias que herendan de la clase Observable
+ * @see java.util.Observable
+ * */
 public class ObservableObject extends Observable {
 
-    /*Clase que permite operar con las instancias que herendan de clases Observable*/
     private static final ObservableObject instance = new ObservableObject();
 
     public static ObservableObject getInstance() {

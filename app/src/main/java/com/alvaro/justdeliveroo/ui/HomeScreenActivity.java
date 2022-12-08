@@ -1,20 +1,9 @@
 package com.alvaro.justdeliveroo.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,16 +14,26 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alvaro.justdeliveroo.R;
-import com.alvaro.justdeliveroo.model.ItemCarrito;
-import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.conexion.checkConexion;
+import com.alvaro.justdeliveroo.model.Comida;
+import com.alvaro.justdeliveroo.model.ItemCarrito;
 import com.alvaro.justdeliveroo.ui.Adaptadores.ComidaAdapter;
 import com.alvaro.justdeliveroo.utility.ObservableObject;
 import com.alvaro.justdeliveroo.viewmodel.FoodViewModel;
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +42,7 @@ import java.util.Observable;
 public class HomeScreenActivity extends AppCompatActivity implements java.util.Observer, PopupMenu.OnMenuItemClickListener {
 
     FoodViewModel foodViewModel;
+
     Observer<List<Comida>> foodMenuObserver;
     Observer<List<ItemCarrito>> cartObserver;
     Observer<Boolean> isFoodUpdateInProgressObserver;
@@ -57,6 +57,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     public static final String INTENT_UPDATE_LIST = "UPDATE_LIST";
     public static final String ACTION_SORT_BY_PRICE = "SORT_PRICE";
     public static final String ACTION_SORT_BY_RATING = "SORT_RATING";
+    public static final String TAG = "HomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +66,16 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = findViewById(R.id.toolbar);
         //Obtenemos la sesión que hemos iniciado
+        FirebaseUser user = getIntent().getParcelableExtra("user");
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
 
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         if(user != null){
-            toolbar.setTitle(user.getEmail());
+            toolbar.setTitle("Welcome "+user.getEmail()+"!");
         }
         else
-            toolbar.setTitle(R.string.app_name + "Please LogIn");
+            toolbar.setTitle(R.string.app_name + "Please log in");
         setSupportActionBar(toolbar);
 
         //Setting up the view model.
@@ -141,12 +141,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
                 }
             }
         };
-        cartObserver = new Observer<List<ItemCarrito>>() {
-            @Override
-            public void onChanged(@Nullable List<ItemCarrito> itemCarritos) {
-                updateCartUI(itemCarritos);
-            }
-        };
+        cartObserver = itemCarritos -> updateCartUI(itemCarritos);
         foodViewModel.isFoodUpdateInProgress().observe(this,isFoodUpdateInProgressObserver);
         ObservableObject.getInstance().addObserver(this);
     }
@@ -160,15 +155,21 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_sort){
-            showPopup(findViewById(R.id.action_sort));
+            showPopup(findViewById(R.id.action_sort),R.menu.actions);
+        }
+        if(item.getItemId() == R.id.action_settings){
+            showPopup(findViewById(R.id.action_settings),R.menu.user_settings);
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public void showPopup(View v) {
+    /**
+     * Displays and inflates menu
+     * @param menuRes ID del menú a enseñar
+     * */
+    public void showPopup(View v, int menuRes) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.actions, popup.getMenu());
+        inflater.inflate(menuRes, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -179,8 +180,18 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
             foodViewModel.sortFood(ACTION_SORT_BY_PRICE);
         }else if(menuItem.getItemId() == R.id.action_sort_rating){
             foodViewModel.sortFood(ACTION_SORT_BY_RATING);
+        }else if(menuItem.getItemId() == R.id.action_log_out){
+           logOut();
         }
         return false;
+    }
+
+    private void logOut(){
+        Log.i(TAG, "Cerrando sesión...");
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+        Log.i(TAG, "Cerrando sesión...");
     }
 
     @SuppressLint("SetTextI18n")
@@ -228,14 +239,21 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
             recyclerView.scheduleLayoutAnimation();
         }
     }
-
+    @Override
+    protected void onStop() {
+        //Aquí el código cuando accedemos al checkout
+        super.onStop();
+    }
     @Override
     protected void onDestroy() {
+        //Aquí el código cuando cerramos la app
         foodViewModel.getFoodDetailsMutableLiveData().removeObserver(foodMenuObserver);
         foodViewModel.isFoodUpdateInProgress().removeObserver(isFoodUpdateInProgressObserver);
         foodViewModel.getCartItemsLiveData().removeObserver(cartObserver);
         ObservableObject.getInstance().deleteObserver(this);
         Glide.get(this).clearMemory();
+        //Eliminamos los elementos en el carrito
+        foodViewModel.dump();
         super.onDestroy();
     }
 

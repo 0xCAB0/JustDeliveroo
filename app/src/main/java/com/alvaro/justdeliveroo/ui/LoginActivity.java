@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.conexion.checkConexion;
-import com.alvaro.justdeliveroo.viewmodel.LoginViewModel;
+import com.alvaro.justdeliveroo.viewmodel.UserViewModel;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,13 +23,14 @@ import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity{
-
+    public final String TAG="LoginActivity";
     TextView login_txt, welcome_txt;
     EditText usr, passw;
     Button login, reg;
-    LoginViewModel lvm;
+    UserViewModel userViewModel;
 
     //Firebase
     FirebaseAuth firebaseAuth;
@@ -56,11 +57,10 @@ public class LoginActivity extends AppCompatActivity{
         //Iniciamos los procesos
         firebaseAuth = FirebaseAuth.getInstance();
 
-        lvm = new LoginViewModel(getApplication());
+        userViewModel = new UserViewModel(getApplication());
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this,R.id.login_usr, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.login_passw,".{6,}",R.string.invalid_password);
-
 
         //Para los botones creamos listeners
         login.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +76,7 @@ public class LoginActivity extends AppCompatActivity{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                //Vamos a home y pasamos las credenciales por intent
-                                Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
-                                //intent.putExtra("user", usrname);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
+                                userLogged(firebaseAuth.getCurrentUser());
                             }
                             else{
                                 //Control de errores
@@ -93,7 +88,7 @@ public class LoginActivity extends AppCompatActivity{
                                 else {
                                     errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                                 }
-                                lvm.getError(errorCode, LoginActivity.this, usr, passw);
+                                userViewModel.getError(errorCode, LoginActivity.this, usr, passw);
                             }
                         }
                     });
@@ -115,4 +110,21 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
+    protected void onStart() {
+        super.onStart();
+        //Comprobamos si el usuario está logueado
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if(currentUser!=null){
+            userLogged(currentUser);
+        }
+    }
+
+    private void userLogged(FirebaseUser currentUser){
+        //Vamos a home y pasamos las credenciales por intent
+        Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
+        intent.putExtra("user", currentUser);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 }

@@ -44,8 +44,9 @@
         <activity android:name=".ui.RegistrarActivity"
             android:exported="true"
             android:parentActivityName="com.alvaro.justdeliveroo.ui.LoginActivity"/>
+        <service android:name="com.alvaro.justdeliveroo.utility.CheckKill" android:stopWithTask="false" />
         <service
-            android:name=".notificaciones.MyFirebaseMessagingService"
+            android:name="com.alvaro.justdeliveroo.notificaciones.MyFirebaseMessagingService"
             android:exported="false"
             android:directBootAware="true">
             <intent-filter>
