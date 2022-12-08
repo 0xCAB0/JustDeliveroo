@@ -216,7 +216,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
         }else if(menuItem.getItemId() == R.id.action_sort_rating){
             foodViewModel.sortFood(ACTION_SORT_BY_RATING);
         }else if(menuItem.getItemId() == R.id.action_log_out){
-           logOut();
+            logOut();
         }
         return false;
     }

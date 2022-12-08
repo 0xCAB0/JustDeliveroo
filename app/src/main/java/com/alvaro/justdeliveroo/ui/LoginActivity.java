@@ -73,27 +73,27 @@ public class LoginActivity extends AppCompatActivity{
                     String pass = passw.getText().toString();
 
                     firebaseAuth.signInWithEmailAndPassword(usrname, pass)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                userLogged(firebaseAuth.getCurrentUser());
-                                task.getResult().getCredential().getSignInMethod();
-                            }
-                            else{
-                                //Control de errores
-                                String errorCode;
-                                boolean networkAvailable = checkConexion.isConnected(LoginActivity.this);
-                                if (!networkAvailable) {
-                                    errorCode= ((FirebaseNetworkException) task.getException()).getMessage();
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        userLogged(firebaseAuth.getCurrentUser());
+                                        task.getResult().getCredential().getSignInMethod();
+                                    }
+                                    else{
+                                        //Control de errores
+                                        String errorCode;
+                                        boolean networkAvailable = checkConexion.isConnected(LoginActivity.this);
+                                        if (!networkAvailable) {
+                                            errorCode= ((FirebaseNetworkException) task.getException()).getMessage();
+                                        }
+                                        else {
+                                            errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                        }
+                                        userViewModel.getError(errorCode, LoginActivity.this, usr, passw);
+                                    }
                                 }
-                                else {
-                                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                }
-                                userViewModel.getError(errorCode, LoginActivity.this, usr, passw);
-                            }
-                        }
-                    });
+                            });
                 }
                 else {
                     //Si no ha pasado por el validador, es que falta campos
