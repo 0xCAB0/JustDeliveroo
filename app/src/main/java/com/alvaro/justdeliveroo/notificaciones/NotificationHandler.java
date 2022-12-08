@@ -83,8 +83,8 @@ public class NotificationHandler extends ContextWrapper {
                 //.setActions(action) // Añadimos la action creada
                 .setLargeIcon(image) //Imagen de contacto (similar)
                 //.setStyle(new Notification.BigPictureStyle().bigPicture(image).bigLargeIcon((Bitmap) null))// Estilo con imagen
-                .setStyle(new Notification.BigTextStyle().bigText(msg))// Estilo con texto grande
-                ;
+                .setStyle(new Notification.BigTextStyle().bigText(msg));// Estilo con texto grande
+
 
     }
 
