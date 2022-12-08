@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "525462211966",
+    "firebase_url": "https://just-deliveroo-default-rtdb.firebaseio.com",
+    "project_id": "just-deliveroo",
+    "storage_bucket": "just-deliveroo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525462211966:android:7ad9c6e83579cb6be8f72f",
+        "android_client_info": {
+          "package_name": "com.alvaro.justdeliveroo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525462211966-n11uqrit4q3alhlr0tjmf7kr37v1va1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpvFJZNqeBphrxRVv-fjjutZ_FbCsjAaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525462211966-n11uqrit4q3alhlr0tjmf7kr37v1va1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

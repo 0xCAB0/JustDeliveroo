@@ -1,23 +1,24 @@
 package com.alvaro.justdeliveroo.viewmodel;
 
+import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.ACTION_SORT_BY_PRICE;
+import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.ACTION_SORT_BY_RATING;
+
 import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.alvaro.justdeliveroo.db.AppDatabase;
-import com.alvaro.justdeliveroo.model.ItemCarrito;
-import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.API.datos.DatosComida;
+import com.alvaro.justdeliveroo.db.AppDatabase;
+import com.alvaro.justdeliveroo.model.Comida;
+import com.alvaro.justdeliveroo.model.ItemCarrito;
 
 import java.util.List;
-
-import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.ACTION_SORT_BY_PRICE;
-import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.ACTION_SORT_BY_RATING;
 
 
 public class FoodViewModel extends AndroidViewModel {
@@ -80,6 +81,10 @@ public class FoodViewModel extends AndroidViewModel {
         subscribeToFoodChanges();
     }
 
+    public void dump(){
+        db.cartItemDao().deleteCarrito();
+    }
+
     private void removeSource(String default_sort) {
         switch (default_sort){
             case ACTION_SORT_BY_PRICE:
@@ -102,5 +107,6 @@ public class FoodViewModel extends AndroidViewModel {
     public void updateCart(Comida comida){
         DatosComida.getInstance().updateCart(db, comida);
     }
+
 
 }
