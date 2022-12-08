@@ -1,9 +1,27 @@
 package com.alvaro.justdeliveroo.ui;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,29 +29,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.alvaro.justdeliveroo.R;
-import com.alvaro.justdeliveroo.conexion.checkConexion;
-import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.model.ItemCarrito;
+import com.alvaro.justdeliveroo.model.Comida;
+import com.alvaro.justdeliveroo.conexion.checkConexion;
 import com.alvaro.justdeliveroo.ui.Adaptadores.ComidaAdapter;
 import com.alvaro.justdeliveroo.utility.ObservableObject;
 import com.alvaro.justdeliveroo.viewmodel.FoodViewModel;
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +55,6 @@ import java.util.Observable;
 public class HomeScreenActivity extends AppCompatActivity implements java.util.Observer, PopupMenu.OnMenuItemClickListener {
 
     FoodViewModel foodViewModel;
-
     Observer<List<Comida>> foodMenuObserver;
     Observer<List<ItemCarrito>> cartObserver;
     Observer<Boolean> isFoodUpdateInProgressObserver;
@@ -57,25 +69,58 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     public static final String INTENT_UPDATE_LIST = "UPDATE_LIST";
     public static final String ACTION_SORT_BY_PRICE = "SORT_PRICE";
     public static final String ACTION_SORT_BY_RATING = "SORT_RATING";
-    public static final String TAG = "HomeActivity";
+    int REQUEST_CODE = 200;
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    System.out.println("No se mostrarán notificaciones");
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
+
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+                Toast.makeText(this, "Permiso concedido",Toast.LENGTH_SHORT).show();
+            } else {
+                // Directly ask for the permission
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},REQUEST_CODE);
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setTheme(R.style.AppTheme_Base);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = findViewById(R.id.toolbar);
         //Obtenemos la sesión que hemos iniciado
-        FirebaseUser user = getIntent().getParcelableExtra("user");
         firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         if(user != null){
-            toolbar.setTitle("Welcome "+user.getEmail()+"!");
+            toolbar.setTitle(user.getEmail());
         }
         else
-            toolbar.setTitle(R.string.app_name + "Please log in");
+            toolbar.setTitle(R.string.app_name + "Please LogIn");
         setSupportActionBar(toolbar);
 
         //Setting up the view model.
@@ -101,6 +146,8 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
 
         //Comprobamos conexión para obtener datos
         checkInternetConnectivity();
+        //Comprobamos permisos de notificaciones
+        askNotificationPermission();
     }
 
     //Check for the network connections.
@@ -141,7 +188,12 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
                 }
             }
         };
-        cartObserver = itemCarritos -> updateCartUI(itemCarritos);
+        cartObserver = new Observer<List<ItemCarrito>>() {
+            @Override
+            public void onChanged(@Nullable List<ItemCarrito> itemCarritos) {
+                updateCartUI(itemCarritos);
+            }
+        };
         foodViewModel.isFoodUpdateInProgress().observe(this,isFoodUpdateInProgressObserver);
         ObservableObject.getInstance().addObserver(this);
     }
@@ -155,21 +207,15 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_sort){
-            showPopup(findViewById(R.id.action_sort),R.menu.actions);
-        }
-        if(item.getItemId() == R.id.action_settings){
-            showPopup(findViewById(R.id.action_settings),R.menu.user_settings);
+            showPopup(findViewById(R.id.action_sort));
         }
         return super.onOptionsItemSelected(item);
     }
-    /**
-     * Displays and inflates menu
-     * @param menuRes ID del menú a enseñar
-     * */
-    public void showPopup(View v, int menuRes) {
+
+    public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(menuRes, popup.getMenu());
+        inflater.inflate(R.menu.actions, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -180,18 +226,8 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
             foodViewModel.sortFood(ACTION_SORT_BY_PRICE);
         }else if(menuItem.getItemId() == R.id.action_sort_rating){
             foodViewModel.sortFood(ACTION_SORT_BY_RATING);
-        }else if(menuItem.getItemId() == R.id.action_log_out){
-           logOut();
         }
         return false;
-    }
-
-    private void logOut(){
-        Log.i(TAG, "Cerrando sesión...");
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
-        Log.i(TAG, "Cerrando sesión...");
     }
 
     @SuppressLint("SetTextI18n")
@@ -239,21 +275,14 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
             recyclerView.scheduleLayoutAnimation();
         }
     }
-    @Override
-    protected void onStop() {
-        //Aquí el código cuando accedemos al checkout
-        super.onStop();
-    }
+
     @Override
     protected void onDestroy() {
-        //Aquí el código cuando cerramos la app
         foodViewModel.getFoodDetailsMutableLiveData().removeObserver(foodMenuObserver);
         foodViewModel.isFoodUpdateInProgress().removeObserver(isFoodUpdateInProgressObserver);
         foodViewModel.getCartItemsLiveData().removeObserver(cartObserver);
         ObservableObject.getInstance().deleteObserver(this);
         Glide.get(this).clearMemory();
-        //Eliminamos los elementos en el carrito
-        foodViewModel.dump();
         super.onDestroy();
     }
 
@@ -269,3 +298,4 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
         }
     }
 }
+
