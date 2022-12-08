@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -16,10 +18,12 @@ import com.alvaro.justdeliveroo.ui.CartActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.logging.Handler;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
+
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         System.out.println("From: " + remoteMessage.getFrom());
 
@@ -30,10 +34,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getTitle(),
+                remoteMessage.getNotification().getBody());
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, CartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -44,7 +49,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_stat_notificacion)
-                        .setContentTitle("FCM Message")
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -64,3 +69,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }
+
