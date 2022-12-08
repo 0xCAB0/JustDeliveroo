@@ -1,7 +1,6 @@
 package com.alvaro.justdeliveroo.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -174,14 +173,20 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 eCoupon.setLongClickable(false);
                 iRemoveCoupon.setVisibility(View.VISIBLE);
                 bApply.setVisibility(View.INVISIBLE);
-                Notification.Builder nBuilder = handler.createNotification(titleString, msgString, true);
-                handler.getManager().notify(1,nBuilder.build());
+                /*
+                if(comprobarPermisos()){
+                    Notification.Builder nBuilder = handler.createNotification(titleString, msgString, true);
+                    handler.getManager().notify(1,nBuilder.build());
+                    }
+                */
             } else {
                 eCouponLayout.setErrorEnabled(true);
                 eCouponLayout.setError("Cupón inválido/Caducado");
             }
         }
     }
+
+    /*Implementar función auxiliar para chequear permiso notificaciones*/
 
     @Override
     protected void onDestroy() {
