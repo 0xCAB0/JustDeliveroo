@@ -186,6 +186,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /*Implementar función auxiliar para chequear permiso notificaciones*/
+
     @Override
     protected void onDestroy() {
         carritoViewModel.getCartItemsLiveData().removeObserver(cartObserver);
