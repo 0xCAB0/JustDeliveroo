@@ -1,28 +1,28 @@
 package com.alvaro.justdeliveroo.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.model.ItemCarrito;
+import com.alvaro.justdeliveroo.notificaciones.NotificationHandler;
 import com.alvaro.justdeliveroo.ui.Adaptadores.CartListAdapter;
 import com.alvaro.justdeliveroo.viewmodel.CarritoViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     Observer<Double> costObserver;
     Observer<String> errorObserver;
     CartListAdapter cartListAdapter;
+    NotificationHandler handler;
+    String titleString = "Cupón Promocional";
+    String msgString = "Gracias por usar el código promocional";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,12 +173,20 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 eCoupon.setLongClickable(false);
                 iRemoveCoupon.setVisibility(View.VISIBLE);
                 bApply.setVisibility(View.INVISIBLE);
+                /*
+                if(comprobarPermisos()){
+                    Notification.Builder nBuilder = handler.createNotification(titleString, msgString, true);
+                    handler.getManager().notify(1,nBuilder.build());
+                    }
+                */
             } else {
                 eCouponLayout.setErrorEnabled(true);
                 eCouponLayout.setError("Cupón inválido/Caducado");
             }
         }
     }
+
+    /*Implementar función auxiliar para chequear permiso notificaciones*/
 
     @Override
     protected void onDestroy() {

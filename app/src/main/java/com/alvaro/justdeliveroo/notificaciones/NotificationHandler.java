@@ -12,6 +12,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.alvaro.justdeliveroo.R;
+
 public class NotificationHandler extends ContextWrapper {
 
     NotificationManager manager;
@@ -67,14 +69,14 @@ public class NotificationHandler extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Notification.Builder createNotificationChannels (String title, String msg, String channel) {
-        Bitmap image = BitmapFactory.decodeResource(getResources(), com.alvaro.justdeliveroo.R.drawable.logo_ok);
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.logo_ok);
 
         // Crear Action
-        Icon icon = Icon.createWithResource(this, com.alvaro.justdeliveroo.R.drawable.ic_launcher_foreground);
+        Icon icon = Icon.createWithResource(this, R.drawable.ic_launcher_foreground);
         //Notification.Action action = new Notification.Action.Builder (icon, "LANZAR", pit).build();
 
         return new Notification.Builder(getApplicationContext(), channel)
-                .setSmallIcon(com.alvaro.justdeliveroo.R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
                 .setAutoCancel(true)
                 .setGroup(groupSummary)
@@ -83,14 +85,14 @@ public class NotificationHandler extends ContextWrapper {
                 //.setActions(action) // Añadimos la action creada
                 .setLargeIcon(image) //Imagen de contacto (similar)
                 //.setStyle(new Notification.BigPictureStyle().bigPicture(image).bigLargeIcon((Bitmap) null))// Estilo con imagen
-                .setStyle(new Notification.BigTextStyle().bigText(msg))// Estilo con texto grande
-                ;
+                .setStyle(new Notification.BigTextStyle().bigText(msg));// Estilo con texto grande
+
 
     }
 
     private Notification.Builder createNotificationWithoutChannels (String title, String msg) {
         return new Notification.Builder(getApplicationContext())
-                .setSmallIcon(com.alvaro.justdeliveroo.R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
                 .setContentText(msg);
     }
@@ -103,7 +105,7 @@ public class NotificationHandler extends ContextWrapper {
         Notification grupo = new Notification.Builder(this,canal)
                 .setGroupSummary(true)
                 .setGroup(groupSummary)
-                .setSmallIcon(com.alvaro.justdeliveroo.R.drawable.ic_launcher_foreground).build();
+                .setSmallIcon(R.drawable.ic_launcher_foreground).build();
         getManager().notify(groupID,grupo);
     }
 

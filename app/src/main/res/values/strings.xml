@@ -9,6 +9,8 @@
     <string name="carga">Cargando...</string>
     <string name="view_cart">Ver Carrito</string>
     <string name="sort_food">Ordenar</string>
+    <string name="user_settings">Ajustes</string>
+    <string name="log_out">Cerrar sesión</string>
     <string name="sort_price">Precio (Menor a mayor)</string>
     <string name="sort_rating">Ordenar por valoración</string>
     <string name="delivery_charges">Gastos de envío</string>

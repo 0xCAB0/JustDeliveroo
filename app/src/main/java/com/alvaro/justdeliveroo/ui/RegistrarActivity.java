@@ -1,6 +1,5 @@
 package com.alvaro.justdeliveroo.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -17,14 +16,13 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.conexion.checkConexion;
-import com.alvaro.justdeliveroo.viewmodel.LoginViewModel;
+import com.alvaro.justdeliveroo.viewmodel.UserViewModel;
 
 public class RegistrarActivity extends AppCompatActivity {
     TextView login_txt, welcome_txt;
@@ -35,7 +33,7 @@ public class RegistrarActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     //Utilizamos la librería awesomeValidation para validar los campos del formulario
     AwesomeValidation awesomeValidation;
-    LoginViewModel lvm;
+    UserViewModel lvm;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +51,7 @@ public class RegistrarActivity extends AppCompatActivity {
         //Iniciamos los procesos
         firebaseAuth = FirebaseAuth.getInstance();
 
-        lvm = new LoginViewModel(getApplication());
+        lvm = new UserViewModel(getApplication());
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this,R.id.login_usr, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.login_passw,".{6,}",R.string.invalid_password);
