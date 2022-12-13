@@ -1,8 +1,11 @@
 package com.alvaro.justdeliveroo.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,12 +16,16 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,6 +65,16 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     public static final String ACTION_SORT_BY_PRICE = "SORT_PRICE";
     public static final String ACTION_SORT_BY_RATING = "SORT_RATING";
     public static final String TAG = "HomeActivity";
+    int REQUEST_CODE = 200;
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    Log.w(TAG, "Notificaciones deshabilitadas");
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +118,8 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
 
         //Comprobamos conexión para obtener datos
         checkInternetConnectivity();
+        //Comprobamos permisos de notificaciones
+        askNotificationPermission();
     }
 
     //Check for the network connections.
@@ -112,6 +131,22 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
             tInfo.setTextSize(20f);
         } else {
             tInfo.setTextSize(14f);
+        }
+    }
+
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                Toast.makeText(this, "Permiso concedido",Toast.LENGTH_SHORT).show();
+            } else {
+                // Directly ask for the permission
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},REQUEST_CODE);
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
         }
     }
 

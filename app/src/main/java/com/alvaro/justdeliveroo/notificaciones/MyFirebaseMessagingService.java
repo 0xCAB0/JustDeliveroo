@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Looper;
-import android.widget.Toast;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.alvaro.justdeliveroo.R;
@@ -18,18 +18,32 @@ import com.alvaro.justdeliveroo.ui.CartActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.logging.Handler;
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    private static final String TAG="FB Notification";
+    /**
+     * Called when a new token for the default Firebase project is generated.
+     *
+     * <p>This is invoked after app install when a token is first generated, and again if the token
+     * changes.
+     *
+     * @param token The token used for sending messages to this application instance. This token is
+     *              the same as the one retrieved by {@link com.google.firebase.messaging.FirebaseMessaging#getToken()}.
+     */
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        Log.d(TAG, "Refreshed token: " + token);
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        System.out.println("From: " + remoteMessage.getFrom());
+        Log.i(TAG,"From: " + remoteMessage.getFrom());
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            System.out.println("Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.i(TAG,"Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
