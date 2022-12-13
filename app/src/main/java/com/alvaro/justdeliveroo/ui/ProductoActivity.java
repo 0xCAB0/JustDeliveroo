@@ -187,14 +187,6 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void share() {
-        /*Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-        sendIntent.setType("text/plain");
-
-        Intent shareIntent = Intent.createChooser(sendIntent, null);
-        startActivity(shareIntent);*/
-
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -203,10 +195,6 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
         Bitmap bitmap = iFoodImage.getDrawingCache();
 
         File file = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + getResources().getString(R.string.app_name)+".jpg");
-        if (file != null) {
-            Log.w("Prueba", file.getName() + file.getAbsolutePath());
-            Log.w("BITMAP", bitmap.toString());
-        }
 
         try {
             fileOutputStream = new FileOutputStream(file);
@@ -219,6 +207,7 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             intent.setType("image/*");
 
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.putExtra(Intent.EXTRA_TEXT, "Elección: " + tName.getText() + "\r\n" + "Precio: " + tCost.getText() + "\r\n");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
