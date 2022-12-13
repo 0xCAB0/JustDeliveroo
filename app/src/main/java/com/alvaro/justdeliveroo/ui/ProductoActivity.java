@@ -10,9 +10,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import android.os.Environment;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +33,10 @@ import com.alvaro.justdeliveroo.model.ItemCarrito;
 import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.viewmodel.FoodDetailViewModel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ProductoActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,10 +49,18 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
     Observer<List<ItemCarrito>> cartObserver;
     private Comida duplicateComida;
 
+    //AÑADIDO PARA COMPARTIR
+    Button share;
+    private FileOutputStream fileOutputStream;
+    private Intent intent;
+
+    //---------------
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_layout);
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
@@ -65,6 +86,9 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             tTotalCost = findViewById(R.id.t_total_price);
             tCartQuantity = findViewById(R.id.t_cart_count);
             AppCompatButton bCart = findViewById(R.id.b_cart);
+            //BOTON AÑADIDO
+            share = findViewById(R.id.btn_share);
+            //---------------
             bCart.setOnClickListener(this);
 
             foodDetailViewModel = ViewModelProviders.of(this).get(FoodDetailViewModel.class);
@@ -84,6 +108,14 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             foodDetailViewModel.getFoodDetailsLiveData().observe(this, foodDetailObserver);
             foodDetailViewModel.getCartItemsLiveData().observe(this, cartObserver);
         }
+        //AÑADIDO
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                share();
+            }
+        });
+        //---------------
     }
 
 
@@ -152,5 +184,52 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
         foodDetailViewModel.getFoodDetailsLiveData().removeObserver(foodDetailObserver);
         foodDetailViewModel.getCartItemsLiveData().removeObserver(cartObserver);
         super.onDestroy();
+    }
+
+    private void share() {
+        /*Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);*/
+
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        iFoodImage.buildDrawingCache();
+        Bitmap bitmap = iFoodImage.getDrawingCache();
+
+        File file = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + getResources().getString(R.string.app_name)+".jpg");
+        if (file != null) {
+            Log.w("Prueba", file.getName() + file.getAbsolutePath());
+            Log.w("BITMAP", bitmap.toString());
+        }
+
+        try {
+            fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        startActivity(Intent.createChooser(intent, "Share Image"));
+
     }
 }

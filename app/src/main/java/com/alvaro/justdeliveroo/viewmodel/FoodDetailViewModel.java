@@ -1,6 +1,12 @@
 package com.alvaro.justdeliveroo.viewmodel;
 
 import android.app.Application;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.StrictMode;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
@@ -10,6 +16,10 @@ import com.alvaro.justdeliveroo.model.ItemCarrito;
 import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.API.datos.DatosComida;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class FoodDetailViewModel extends AndroidViewModel {
@@ -48,4 +58,6 @@ public class FoodDetailViewModel extends AndroidViewModel {
         DatosComida.getInstance().updateCart(db, comida);
         db.foodDetailsDao().save(comida);
     }
+
+
 }
