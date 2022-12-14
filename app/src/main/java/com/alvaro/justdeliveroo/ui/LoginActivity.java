@@ -2,6 +2,7 @@ package com.alvaro.justdeliveroo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 userLogged(firebaseAuth.getCurrentUser());
+                                task.getResult().getCredential().getSignInMethod();
                             }
                             else{
                                 //Control de errores
@@ -120,6 +122,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void userLogged(FirebaseUser currentUser){
+        Log.d(TAG,"My token: " + currentUser.getIdToken(true));
         //Vamos a home y pasamos las credenciales por intent
         Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
         intent.putExtra("user", currentUser);

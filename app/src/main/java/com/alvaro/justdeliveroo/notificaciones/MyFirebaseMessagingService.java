@@ -1,86 +1,104 @@
 package com.alvaro.justdeliveroo.notificaciones;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.alvaro.justdeliveroo.R;
-import com.alvaro.justdeliveroo.ui.CartActivity;
+import com.alvaro.justdeliveroo.ui.NotificationActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String TAG="FB Notification";
-    /**
-     * Called when a new token for the default Firebase project is generated.
-     *
-     * <p>This is invoked after app install when a token is first generated, and again if the token
-     * changes.
-     *
-     * @param token The token used for sending messages to this application instance. This token is
-     *              the same as the one retrieved by {@link com.google.firebase.messaging.FirebaseMessaging#getToken()}.
-     */
-    @Override
-    public void onNewToken(@NonNull String token) {
-        super.onNewToken(token);
-        Log.d(TAG, "Refreshed token: " + token);
-    }
+    public static final String FCM_PARAM = "picture";
+    private static final String CHANNEL_NAME = "FCM";
+    private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
+    private int numMessages = 0;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.i(TAG,"From: " + remoteMessage.getFrom());
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.i(TAG,"Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getNotification().getTitle(),
-                remoteMessage.getNotification().getBody());
+        super.onMessageReceived(remoteMessage);
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        Map<String, String> data = remoteMessage.getData();
+        Log.d("FROM", remoteMessage.getFrom());
+        sendNotification(notification, data);
     }
 
-    private void sendNotification(String title, String messageBody) {
-        Intent intent = new Intent(this, CartActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_IMMUTABLE);
+    private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
 
-        String channelId = "fcm_default_channel";
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_stat_notificacion)
-                        .setContentTitle(title)
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.putExtras(bundle);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Since android Oreo notification channel is needed.
+        NotificationCompat.Builder notificationBuilder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            notificationBuilder = new NotificationCompat.Builder(this, getString(R.string.notification_channel_main))
+                    .setContentTitle(notification.getTitle())
+                    .setContentText(notification.getBody())
+                    .setAutoCancel(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    //.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.win))
+                    .setContentIntent(pendingIntent)
+                    .setContentInfo("Hello")
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                    .setColor(getColor(R.color.colorAccent))
+                    .setLights(Color.RED, 1000, 300)
+                    .setDefaults(Notification.DEFAULT_VIBRATE)
+                    .setNumber(++numMessages)
+                    .setSmallIcon(R.drawable.ic_stat_notificacion);
+        }
+
+        try {
+            String picture = data.get(FCM_PARAM);
+            if (picture != null && !"".equals(picture)) {
+                URL url = new URL(picture);
+                Bitmap bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                notificationBuilder.setStyle(
+                        new NotificationCompat.BigPictureStyle().bigPicture(bigPicture).setSummaryText(notification.getBody())
+                );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(
+                    getString(R.string.notification_channel_main), CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription(CHANNEL_DESC);
+            channel.setShowBadge(true);
+            channel.canShowBadge();
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500});
+
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        assert notificationManager != null;
+        notificationManager.notify(0, notificationBuilder.build());
     }
 }
-

@@ -5,6 +5,8 @@
     <string name="db_URL">https://prueba1-eed85-default-rtdb.europe-west1.firebasedatabase.app/</string>
     <string name="db_name">JustDeliverooDB</string>
     <string name="_0">0</string>
+    <string name="notification_channel_main">0</string>
+    <string name="notification_channel_sec">1</string>
     <string name="updating_menu">Actualizando el menú</string>
     <string name="carga">Cargando...</string>
     <string name="view_cart">Ver Carrito</string>
