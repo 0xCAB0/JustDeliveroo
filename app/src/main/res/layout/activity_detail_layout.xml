@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -92,17 +93,17 @@
                 android:layout_toStartOf="@id/i_plus"
                 android:layout_toEndOf="@+id/i_minus"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_share"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="78dp"
                 android:layout_alignTop="@+id/i_food_image"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="161dp"
-                android:layout_marginTop="409dp"
-                android:layout_marginEnd="162dp"
-                android:text="share" />
+                android:layout_marginStart="157dp"
+                android:layout_marginTop="411dp"
+                android:layout_marginEnd="155dp"
+                app:srcCompat="@mipmap/img_1" />
 
         </RelativeLayout>
     </ScrollView>

@@ -22,6 +22,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,7 +51,7 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
     private Comida duplicateComida;
 
     //AÑADIDO PARA COMPARTIR
-    Button share;
+    ImageButton share;
     private FileOutputStream fileOutputStream;
     private Intent intent;
 
