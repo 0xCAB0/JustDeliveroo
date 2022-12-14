@@ -145,9 +145,17 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
                 foodDetailViewModel.updateCart(duplicateComida);
                 break;
             case R.id.i_plus:
-                duplicateComida.setQuantity(duplicateComida.getQuantity()+1);
-                tQuantity.setText(String.valueOf(duplicateComida.getQuantity()));
-                foodDetailViewModel.updateCart(duplicateComida);
+                Random r = new Random();
+               int randomNumber = r.nextInt(2);
+                // Si el número generado es 0, mostramos un mensaje de notificación
+                // indicando que no hay disponibilidad de ese producto
+                if (randomNumber == 0) {
+                    Toast.makeText(getApplicationContext(), "Lo sentimos, este producto no está disponible en este momento.", Toast.LENGTH_LONG).show();
+                }else {
+                    duplicateComida.setQuantity(duplicateComida.getQuantity() + 1);
+                    tQuantity.setText(String.valueOf(duplicateComida.getQuantity()));
+                    foodDetailViewModel.updateCart(duplicateComida);
+                }
                 break;
             case R.id.b_cart:
                 startActivity(new Intent(this,CartActivity.class));
