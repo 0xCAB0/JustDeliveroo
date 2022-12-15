@@ -141,7 +141,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
                     PackageManager.PERMISSION_GRANTED) {
                 // FCM SDK (and your app) can post notifications.
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                Toast.makeText(this, "Permiso concedido",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No llegaran notificaciones",Toast.LENGTH_SHORT).show();
             } else {
                 // Directly ask for the permission
                 requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},REQUEST_CODE);
