@@ -1,15 +1,18 @@
 package com.alvaro.justdeliveroo.API.datos;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.alvaro.justdeliveroo.db.AppDatabase;
-import com.alvaro.justdeliveroo.model.Comida;
+import androidx.lifecycle.MutableLiveData;
+
 import com.alvaro.justdeliveroo.API.FirebaseAPI;
 import com.alvaro.justdeliveroo.API.getJSON;
-import com.alvaro.justdeliveroo.extras.insertComida;
+import com.alvaro.justdeliveroo.db.AppDatabase;
 import com.alvaro.justdeliveroo.extras.UpdateCart;
+import com.alvaro.justdeliveroo.extras.insertComida;
+import com.alvaro.justdeliveroo.model.Comida;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -40,8 +43,19 @@ public class DatosComida {
                     new insertComida(AppDatabase.getDatabase(context), response.body()).execute();
                     isFoodCallOngoing.setValue(false);
                 }else{
-                    Log.e("Error:" +TAG,"response not successful");
+                String error;
+                Log.e("Error:" +TAG,"response not successful: "+ response.code());
+                Log.i("Auth"+ TAG, "User: " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                switch (response.code()){
+                    case 401:
+                        error = "Acceso no autorizado";
+                        break;
+                    default:
+                        error = response.errorBody().contentType().type();
+                        break;
                 }
+                Toast.makeText(context, error , Toast.LENGTH_LONG).show();
+            }
             }
 
             @Override
