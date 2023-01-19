@@ -2,13 +2,14 @@ package com.alvaro.justdeliveroo.ui.Adaptadores;
 
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.model.ItemCarrito;
@@ -17,7 +18,9 @@ import com.alvaro.justdeliveroo.viewmodel.CarritoViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-//Adapter for the recyclerview showing foods saved to cart.
+/**
+ * Adapter for the recyclerview showing foods saved to cart.
+ */
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.RecyclerViewHolders> {
 
     private List<ItemCarrito> cartList;
@@ -41,7 +44,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.Recycl
         private final TextView tPrice;
         private final TextView tTotalPrice;
         private final TextView tQuantity;
-
 
         RecyclerViewHolders(View itemView) {
             super(itemView);

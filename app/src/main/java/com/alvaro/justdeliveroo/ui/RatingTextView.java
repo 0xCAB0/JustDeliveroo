@@ -1,21 +1,23 @@
 package com.alvaro.justdeliveroo.ui;
 
+import static android.view.Gravity.CENTER;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
-import android.util.AttributeSet;
 
 import com.alvaro.justdeliveroo.R;
-
-import static android.view.Gravity.CENTER;
-
+/**
+ * Permite dar un color al rating en función de este
+ * */
 public class RatingTextView extends AppCompatTextView {
-    /*Permite dar un color al rating en función de este*/
+
     private Float rating = 0.0f;
 
     public RatingTextView(Context context) {

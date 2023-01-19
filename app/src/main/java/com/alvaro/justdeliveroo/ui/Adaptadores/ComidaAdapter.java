@@ -1,11 +1,10 @@
 package com.alvaro.justdeliveroo.ui.Adaptadores;
 
+import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.INTENT_UPDATE_FOOD;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +12,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.db.AppDatabase;
 import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.ui.ProductoActivity;
 import com.alvaro.justdeliveroo.ui.RatingTextView;
 import com.alvaro.justdeliveroo.utility.ObservableObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import static com.alvaro.justdeliveroo.ui.HomeScreenActivity.INTENT_UPDATE_FOOD;
-//Adapter for the recyclerview showing food item to be displayed.
+/**
+ * Adaptador para la lista de comida en Home
+ */
 public class ComidaAdapter extends RecyclerView.Adapter<ComidaAdapter.FoodItemViewHolder> {
 
     private List<Comida> foodList;

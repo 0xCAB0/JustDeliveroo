@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 public class LoginActivity extends AppCompatActivity{
     public final String TAG="LoginActivity";
@@ -122,7 +123,14 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void userLogged(FirebaseUser currentUser){
-        Log.d(TAG,"My token: " + currentUser.getIdToken(true));
+         currentUser.getIdToken(true).addOnCompleteListener(this, new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                Log.d(TAG,"My token: " + task.getResult().getToken());
+
+            }
+        });
+
         //Vamos a home y pasamos las credenciales por intent
         Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class);
         intent.putExtra("user", currentUser);

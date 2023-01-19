@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * Clase que permite detectar el inicio y fin de un servicio, además del final de una tarea
+ */
 public class CheckKill extends Service {
 
     @Override
@@ -27,7 +30,6 @@ public class CheckKill extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("ClearFromRecentService", "END");
-        //Code here
         stopSelf();
     }
 }

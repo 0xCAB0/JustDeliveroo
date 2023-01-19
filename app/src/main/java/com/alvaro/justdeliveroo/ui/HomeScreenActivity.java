@@ -89,7 +89,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         if(user != null){
-            toolbar.setTitle("Welcome "+user.getEmail()+"!");
+            toolbar.setTitle("¡Hola "+user.getEmail()+"!");
         }
         else
             toolbar.setTitle(R.string.app_name + "Please log in");

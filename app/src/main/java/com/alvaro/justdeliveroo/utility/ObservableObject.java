@@ -3,7 +3,7 @@ package com.alvaro.justdeliveroo.utility;
 import java.util.Observable;
 
 /**
- * Clase que permite operar con las instancias que herendan de la clase Observable
+ * Clase que permite actualizar un objeto de la clase Observable
  * @see java.util.Observable
  * */
 public class ObservableObject extends Observable {

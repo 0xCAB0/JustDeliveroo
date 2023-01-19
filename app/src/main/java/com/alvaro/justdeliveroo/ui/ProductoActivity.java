@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -30,10 +30,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class ProductoActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -104,14 +104,12 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             foodDetailViewModel.getFoodDetailsLiveData().observe(this, foodDetailObserver);
             foodDetailViewModel.getCartItemsLiveData().observe(this, cartObserver);
         }
-        //AÑADIDO
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 share();
             }
         });
-        //---------------
     }
 
 
@@ -192,15 +190,27 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
 
     private void share() {
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
+        /*Debuggin*/
+        StrictMode.VmPolicy builder = new StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build();
+        StrictMode.setVmPolicy(builder);
 
         iFoodImage.buildDrawingCache();
         Bitmap bitmap = iFoodImage.getDrawingCache();
 
-        File file = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + getResources().getString(R.string.app_name)+".jpg");
+        File file=null;
+        File[] mediaDirs = this.getExternalMediaDirs();
+        for (File dir : mediaDirs) {
+            file = new File(dir, "JustDeliveroo.jpg");
+            if (file.exists() && file.canRead()) {
+                break;
+            }
+        }
 
         try {
+
             fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
 
@@ -213,16 +223,14 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             intent.putExtra(Intent.EXTRA_TEXT, "Elección: " + tName.getText() + "\r\n" + "Precio: " + tCost.getText() + "\r\n");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(Intent.createChooser(intent, "Share Image"));
 
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Permisos de almacenamiento insuficientes" , Toast.LENGTH_LONG).show();
         }
 
-        startActivity(Intent.createChooser(intent, "Share Image"));
+
 
     }
 }
