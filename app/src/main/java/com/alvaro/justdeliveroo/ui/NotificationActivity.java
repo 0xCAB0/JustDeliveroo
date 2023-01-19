@@ -12,7 +12,7 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_layout);
+        setContentView(R.layout.layout_notifications);
 
         TextView txt = findViewById(R.id.textView);
 
