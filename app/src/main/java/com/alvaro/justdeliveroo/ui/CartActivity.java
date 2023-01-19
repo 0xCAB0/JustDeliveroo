@@ -3,6 +3,7 @@ package com.alvaro.justdeliveroo.ui;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -70,6 +71,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         cartList.setLayoutManager(mLayoutManager);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            handler = new NotificationHandler(this);
+        }
     }
 
     @Override

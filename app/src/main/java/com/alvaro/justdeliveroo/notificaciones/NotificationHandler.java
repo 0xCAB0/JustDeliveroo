@@ -64,7 +64,6 @@ public class NotificationHandler extends ContextWrapper {
             }
         } else
             return createNotificationWithoutChannels(title, msg);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
