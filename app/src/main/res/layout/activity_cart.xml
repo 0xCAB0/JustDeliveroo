@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/coupon_layout"
                 android:layout_alignParentEnd="true"
-                android:text="Apply"
+                android:text="Añade"
                 android:textColor="@color/colorPrimary" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -59,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/coupon_layout"
                 android:layout_alignParentEnd="true"
+                android:text="Eliminar"
                 android:textColor="@color/colorPrimary"
-                android:text="Remove"
                 android:visibility="invisible" />
             <TextView
                 android:layout_width="match_parent"
@@ -146,17 +146,18 @@
                 android:layout_below="@+id/line"
                 android:layout_marginTop="8dp"
                 android:padding="4dp" />
+
             <TextView
+                android:id="@+id/h_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/h_pay"
-                android:text="You Pay"
-                android:textStyle="bold"
                 android:layout_below="@id/line"
-                android:padding="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:layout_toStartOf="@id/line"/>
+                android:layout_toStartOf="@id/line"
+                android:padding="4dp"
+                android:text="Total"
+                android:textStyle="bold" />
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

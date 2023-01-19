@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity{
         setTheme(R.style.AppTheme_Base);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         //Recogemos los elementos de la vista
         login_txt = findViewById(R.id.login_txt);
