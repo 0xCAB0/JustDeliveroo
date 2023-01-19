@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 
 @Entity
 public class ItemCarrito {
-    /*
+   /**
    El modelo de un item del carrito es esencialmente un subset de un elemento
    comida, por lo que obtenemos lo necesario usando su PK (name)
 
     ItemCarrito:
     * TEXT item_name (FK refereced from Comida)
     * FLOAT price (FK refereced from Comida)
-    * INT quantity*/
+    * INT quantity
+    * */
 
     @ForeignKey(entity = Comida.class,
             parentColumns = "name",

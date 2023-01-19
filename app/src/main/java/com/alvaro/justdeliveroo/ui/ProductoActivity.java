@@ -189,7 +189,6 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void share() {
-
         /*Debuggin*/
         StrictMode.VmPolicy builder = new StrictMode.VmPolicy.Builder()
                 .detectAll()
@@ -210,7 +209,6 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
         }
 
         try {
-
             fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
 
@@ -229,8 +227,5 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             e.printStackTrace();
             Toast.makeText(this, "Permisos de almacenamiento insuficientes" , Toast.LENGTH_LONG).show();
         }
-
-
-
     }
 }

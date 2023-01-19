@@ -11,8 +11,10 @@ import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.model.ItemCarrito;
 
-/*Clase estandar de invocación a una bbdd implementada con room*/
-
+/**
+ * Clase estandar de invocación a una bbdd implementada con room
+ * @version 5
+ * */
 @Database(entities = {Comida.class, ItemCarrito.class}, version = 5,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;

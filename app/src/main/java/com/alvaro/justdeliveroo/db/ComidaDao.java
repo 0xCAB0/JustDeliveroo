@@ -1,6 +1,8 @@
 package com.alvaro.justdeliveroo.db;
 
 
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -9,9 +11,6 @@ import androidx.room.Query;
 import com.alvaro.justdeliveroo.model.Comida;
 
 import java.util.List;
-
-import static androidx.room.OnConflictStrategy.REPLACE;
-
 
 @Dao
 public interface ComidaDao {
