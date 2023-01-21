@@ -151,10 +151,10 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/food_list"
-        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintHorizontal_bias="0.901"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/action_bar"
-        app:layout_constraintVertical_bias="0.937"
+        app:layout_constraintVertical_bias="0.92"
         app:rippleColor="#FFC107"
         app:srcCompat="@drawable/ic_star"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
