@@ -39,6 +39,7 @@ import com.alvaro.justdeliveroo.ui.Adaptadores.ComidaAdapter;
 import com.alvaro.justdeliveroo.utility.ObservableObject;
 import com.alvaro.justdeliveroo.viewmodel.FoodViewModel;
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -58,6 +59,7 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
     AppCompatButton bCart;
     ImageView infoImage;
     TextView tInfo,tTotalCost,tCartQuantity;
+    FloatingActionButton btn_txt;
     Toolbar cartView;
     FirebaseAuth firebaseAuth;
     public static final String INTENT_UPDATE_FOOD = "UPDATE_FOOD";
@@ -76,12 +78,25 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
                 }
             });
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setTheme(R.style.AppTheme_Base);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        btn_txt = findViewById(R.id.btn_home_txt);
+        btn_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_SUBJECT, "JustDeliveroo");
+                share.putExtra(Intent.EXTRA_TEXT, "Recomiendo utilizar JustDeliveroo, es una aplicación muy útil :D");
+                startActivity(Intent.createChooser(share, "Share"));
+            }
+        });
         //Obtenemos la sesión que hemos iniciado
         FirebaseUser user = getIntent().getParcelableExtra("user");
         firebaseAuth = FirebaseAuth.getInstance();
@@ -120,6 +135,8 @@ public class HomeScreenActivity extends AppCompatActivity implements java.util.O
         checkInternetConnectivity();
         //Comprobamos permisos de notificaciones
         askNotificationPermission();
+
+
     }
 
     //Check for the network connections.
