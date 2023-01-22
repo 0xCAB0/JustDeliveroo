@@ -2,6 +2,7 @@
 # JustDeliveroo
 
 Food delivery mock app using Firebase for authentication, notifications and database.
+![Logo](https://github.com/alvarocabo/JustDeliveroo/blob/master/app/src/main/res/drawable/logo_mini.png?raw=true)
 
 
 ## Authors
@@ -32,5 +33,4 @@ Returns all the elements in the collection
 - Cross platform
 
 
-![Logo](https://github.com/alvarocabo/JustDeliveroo/blob/master/app/src/main/res/drawable/logo_ok.png?raw=true)
 
