@@ -24,9 +24,17 @@
 
 - [@alvarocabo](https://www.github.com/alvarocabo)
 
+## Database Arch
+
+We are using the Firebase Realtime database, which is a based on a NoSQL arch, so here are our 2 models in use for this project at the time of this realease. (v 0.1) 
+
+![DB_Diagram](https://github.com/alvarocabo/JustDeliveroo/blob/master/docs/DB_diagram.png)
+
 ## API Reference
 
-#### Get all items
+Here are all the request our database allows
+
+### Get all items
 
 ```http
   GET /Comida
