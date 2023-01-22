@@ -26,7 +26,7 @@
 
 ## Database Arch
 
-We are using the Firebase Realtime database, which is a based on a NoSQL arch, so here are our 2 models in use for this project at the time of this realease. (v 0.1) 
+We are using the Firebase Realtime database, which is a based on a NoSQL arch, so here are our 2 models in use for this project at the time of this realease. (v 0.1)  
 
 ![DB_Diagram](https://github.com/alvarocabo/JustDeliveroo/blob/master/docs/DB_diagram.png)
 
@@ -48,7 +48,9 @@ Returns all the elements in the collection
 
 ## Features
 
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
+- Cupon use for discouts
+- Push Notifications triggered by actions
+- HTTP conection to our database
+- User authentication
+- Live checkout car
+- A cool logo!
