@@ -20,14 +20,15 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 import com.alvaro.justdeliveroo.R;
 import com.alvaro.justdeliveroo.model.Comida;
 import com.alvaro.justdeliveroo.model.ItemCarrito;
 import com.alvaro.justdeliveroo.viewmodel.FoodDetailViewModel;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +47,7 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
     private Comida duplicateComida;
 
     //AÑADIDO PARA COMPARTIR
+    FloatingActionButton btn_share_txt2;
     ImageButton share;
     private FileOutputStream fileOutputStream;
     private Intent intent;
@@ -83,6 +85,17 @@ public class ProductoActivity extends AppCompatActivity implements View.OnClickL
             tCartQuantity = findViewById(R.id.t_cart_count);
             AppCompatButton bCart = findViewById(R.id.b_cart);
             //BOTON AÑADIDO
+            btn_share_txt2 = findViewById(R.id.btn_share_txt2);
+            btn_share_txt2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_SUBJECT, "JustDeliveroo");
+                    share.putExtra(Intent.EXTRA_TEXT, "Recomiendo utilizar JustDeliveroo, es una aplicación muy útil :D");
+                    startActivity(Intent.createChooser(share, "Share"));
+                }
+            });
             share = findViewById(R.id.btn_share);
             //---------------
             bCart.setOnClickListener(this);

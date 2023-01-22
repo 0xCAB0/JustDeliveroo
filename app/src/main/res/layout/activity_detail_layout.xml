@@ -105,6 +105,19 @@
                 android:layout_marginEnd="155dp"
                 app:srcCompat="@mipmap/img_1" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_share_txt2"
+                android:layout_width="100dp"
+                android:layout_height="91dp"
+                android:layout_alignTop="@+id/i_food_image"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="297dp"
+                android:layout_marginTop="617dp"
+                android:layout_marginEnd="39dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_star" />
+
         </RelativeLayout>
     </ScrollView>
 
