@@ -14,7 +14,7 @@
 </td>  
 <td>
 
-![Logo](app\src\main\res\drawable\logo_mini.png)
+![Logo](https://github.com/alvarocabo/JustDeliveroo/blob/master/app/src/main/res/drawable/logo_mini.png?raw=true)
 
 </td>
 </tr>
