@@ -1,14 +1,28 @@
 
 # JustDeliveroo
 
-Food delivery mock app using Firebase for authentication, notifications and database.
-![Logo](https://github.com/alvarocabo/JustDeliveroo/blob/master/app/src/main/res/drawable/logo_mini.png?raw=true)
+<table>  
+<tr>  
+<td>  
 
+## Food delivery mock app using Firebase for authentication,  notifications and database
+
+- RoomDB for local DB instance
+- Retrofit for HTTP requests
+- MVVM architecture
+
+</td>  
+<td>
+
+![Logo](app\src\main\res\drawable\logo_mini.png)
+
+</td>
+</tr>
+</table>
 
 ## Authors
 
 - [@alvarocabo](https://www.github.com/alvarocabo)
-
 
 ## API Reference
 
@@ -24,13 +38,9 @@ Food delivery mock app using Firebase for authentication, notifications and data
 
 Returns all the elements in the collection
 
-
 ## Features
 
 - Light/dark mode toggle
 - Live previews
 - Fullscreen mode
 - Cross platform
-
-
-
